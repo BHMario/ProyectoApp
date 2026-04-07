@@ -4,22 +4,25 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#FFFFFF">
+    android:background="@color/backgroundColor">
 
+    <!-- Header -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="16dp"
-        android:background="#FF9500">
+        android:paddingHorizontal="16dp"
+        android:paddingVertical="24dp"
+        android:background="@drawable/header_gradient"
+        android:elevation="4dp">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="MangUP"
-            android:textSize="28sp"
+            android:textSize="32sp"
             android:textStyle="bold"
-            android:textColor="#FFFFFF" />
+            android:textColor="@color/white" />
 
         <TextView
             android:id="@+id/welcomeTextView"
@@ -27,124 +30,195 @@
             android:layout_height="wrap_content"
             android:text="Bienvenido, Usuario"
             android:textSize="14sp"
-            android:textColor="#FFFFFF"
+            android:textColor="@color/primaryOrange"
             android:layout_marginTop="8dp" />
     </LinearLayout>
 
+    <!-- Contenido Principal -->
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1">
+        android:layout_weight="1"
+        android:scrollbars="none">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="20dp">
+            android:paddingHorizontal="16dp"
+            android:paddingVertical="24dp">
 
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="200dp"
-                android:src="@drawable/ic_launcher_foreground"
-                android:scaleType="centerInside"
-                android:contentDescription="Logo MangUP" />
-
-            <TextView
+            <!-- Acerca De -->
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Acerca de MangUP"
-                android:textSize="24sp"
-                android:textStyle="bold"
-                android:textColor="#FF9500"
-                android:layout_marginTop="20dp"
-                android:layout_marginBottom="12dp" />
+                android:orientation="vertical"
+                android:background="@drawable/card_background"
+                android:padding="20dp"
+                android:layout_marginBottom="16dp">
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="MangUP es tu ecommerce  especializado en manga, figuras coleccionables y merchandising anime. Nos apasiona traerte los mejores productos del anime y manga japonés."
-                android:textSize="16sp"
-                android:textColor="#333333"
-                android:layout_marginBottom="20dp"
-                android:lineSpacingMultiplier="1.5" />
+                <TextView
+                    style="@style/TextHeading"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Acerca de MangUP"
+                    android:textColor="@color/primaryOrange"
+                    android:layout_marginBottom="12dp" />
 
+                <TextView
+                    style="@style/TextBody"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="MangUP es tu ecommerce especializado en manga, figuras coleccionables y merchandising anime. Nos apasiona traerte los mejores productos del anime y manga japonés con la mejor calidad y los precios más competitivos."
+                    android:layout_marginBottom="16dp" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/lightGray"
+                    android:layout_marginVertical="8dp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="✓ Envíos rápidos y seguros"
+                    android:textSize="14sp"
+                    android:textColor="@color/success"
+                    android:layout_marginVertical="4dp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="✓ Productos 100% originales"
+                    android:textSize="14sp"
+                    android:textColor="@color/success"
+                    android:layout_marginVertical="4dp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="✓ Atención al cliente disponible"
+                    android:textSize="14sp"
+                    android:textColor="@color/success"
+                    android:layout_marginVertical="4dp" />
+            </LinearLayout>
+
+            <!-- Titulo Sección Productos -->
             <TextView
+                style="@style/TextHeading"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="¿Qué ofrecemos?"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                android:textColor="#FF9500"
-                android:layout_marginTop="16dp"
-                android:layout_marginBottom="12dp" />
+                android:textColor="@color/textPrimary"
+                android:layout_marginBottom="16dp"
+                android:layout_marginTop="8dp" />
 
+            <!-- Manga -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
+                android:orientation="horizontal"
+                android:background="@drawable/card_background"
+                android:padding="16dp"
                 android:layout_marginBottom="12dp">
 
-                <TextView
-                    android:layout_width="match_parent"
+                <LinearLayout
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="Manga"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
-                    android:textColor="#333333"
-                    android:layout_marginBottom="4dp" />
+                    android:layout_weight="1"
+                    android:orientation="vertical">
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Una amplia selección de manga en español de todos los géneros."
-                    android:textSize="14sp"
-                    android:textColor="#666666" />
+                    <TextView
+                        style="@style/TextHeading"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Manga"
+                        android:textSize="18sp"
+                        android:textColor="@color/primaryOrange"
+                        android:layout_marginBottom="8dp" />
+
+                    <TextView
+                        style="@style/TextCaption"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Una amplia selección de manga en español de todos los géneros: shonen, shoujo, seinen, y más."
+                        android:textColor="@color/textSecondary"
+                        android:lineSpacingMultiplier="1.4" />
+                </LinearLayout>
             </LinearLayout>
 
+            <!-- Figuras -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
+                android:orientation="horizontal"
+                android:background="@drawable/card_background"
+                android:padding="16dp"
                 android:layout_marginBottom="12dp">
 
-                <TextView
-                    android:layout_width="match_parent"
+                <LinearLayout
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="Figuras Coleccionables"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
-                    android:textColor="#333333"
-                    android:layout_marginBottom="4dp" />
+                    android:layout_weight="1"
+                    android:orientation="vertical">
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Figuras de acción y modelos de tus personajes favoritos."
-                    android:textSize="14sp"
-                    android:textColor="#666666" />
+                    <TextView
+                        style="@style/TextHeading"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Figuras Coleccionables"
+                        android:textSize="18sp"
+                        android:textColor="@color/primaryOrange"
+                        android:layout_marginBottom="8dp" />
+
+                    <TextView
+                        style="@style/TextCaption"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Figuras de acción, modelos estatuillas y collectibles premium de tus personajes favoritos."
+                        android:textColor="@color/textSecondary"
+                        android:lineSpacingMultiplier="1.4" />
+                </LinearLayout>
             </LinearLayout>
 
+            <!-- Merchandising -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:orientation="horizontal"
+                android:background="@drawable/card_background"
+                android:padding="16dp"
+                android:layout_marginBottom="12dp">
 
-                <TextView
-                    android:layout_width="match_parent"
+                <LinearLayout
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="Merchandising"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
-                    android:textColor="#333333"
-                    android:layout_marginBottom="4dp" />
+                    android:layout_weight="1"
+                    android:orientation="vertical">
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Camisetas, accesorios y mucho más de tus animes favoritos."
-                    android:textSize="14sp"
-                    android:textColor="#666666" />
+                    <TextView
+                        style="@style/TextHeading"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Merchandising"
+                        android:textSize="18sp"
+                        android:textColor="@color/primaryOrange"
+                        android:layout_marginBottom="8dp" />
+
+                    <TextView
+                        style="@style/TextCaption"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Camisetas, mochilas, gorras, fundas y muchos más accesorios de tus animes favoritos."
+                        android:textColor="@color/textSecondary"
+                        android:lineSpacingMultiplier="1.4" />
+                </LinearLayout>
             </LinearLayout>
+
+            <!-- Footer -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="20dp" />
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

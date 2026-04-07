@@ -1,5 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
+    <!-- Colores primarios -->
+    <color name="primaryOrange">#FF9500</color>
+    <color name="black">#1A1A1A</color>
+    <color name="white">#FFFFFF</color>
+    
+    <!-- Colores secundarios -->
+    <color name="gray">#666666</color>
+    <color name="lightGray">#F5F5F5</color>
+    
+    <!-- Colores de estado -->
+    <color name="success">#4CAF50</color>
+    
+    <!-- Colores de texto -->
+    <color name="textPrimary">#1A1A1A</color>
+    <color name="textSecondary">#666666</color>
+    <color name="textHint">#999999</color>
+    
+    <!-- Colores de fondo -->
+    <color name="backgroundColor">#FAFAFA</color>
+    <color name="surfaceColor">#FFFFFF</color>
 </resources>
