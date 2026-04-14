@@ -35,8 +35,8 @@ class LoginActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            // Navegar a HomeActivity si pasa la validación
-            val intent = Intent(this, HomeActivity::class.java)
+            // Navegar a ProductCatalogActivity si pasa la validación
+            val intent = Intent(this, ProductCatalogActivity::class.java)
             intent.putExtra("userEmail", email)
             startActivity(intent)
             finish() // Cerrar LoginActivity
