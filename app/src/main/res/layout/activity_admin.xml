@@ -195,7 +195,7 @@
                         android:layout_height="48dp"
                         android:src="@android:drawable/ic_menu_camera"
                         android:alpha="0.4"
-                        app:tint="@color/textHint"
+                        android:tint="@color/textHint"
                         android:contentDescription="Icono cámara" />
 
                     <TextView
@@ -237,7 +237,7 @@
             android:layout_height="50dp"
             android:text="Volver al Catálogo"
             android:textSize="14sp"
-            android:textColor="@color/white"
+            android:textColor="@color/primaryOrange"
             android:background="@drawable/button_secondary_background"
             android:layout_marginBottom="24dp" />
 
