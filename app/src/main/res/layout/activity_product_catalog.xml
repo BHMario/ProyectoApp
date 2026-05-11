@@ -31,10 +31,20 @@
                 android:textStyle="bold"
                 android:textColor="@color/white" />
 
-            <FrameLayout
+            <ImageButton
+                android:id="@+id/adminButton"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
-                android:layout_marginStart="12dp">
+                android:src="@android:drawable/ic_menu_manage"
+                android:background="@drawable/button_secondary_background"
+                android:scaleType="centerInside"
+                android:visibility="gone"
+                android:contentDescription="Panel Admin"
+                android:layout_marginEnd="12dp" />
+
+            <FrameLayout
+                android:layout_width="48dp"
+                android:layout_height="48dp">
 
                 <ImageButton
                     android:id="@+id/cartButton"
