@@ -2,6 +2,7 @@ package com.example.myapplication
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import android.widget.ImageButton
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
@@ -15,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView
 class ProductCatalogActivity : AppCompatActivity() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var cartButton: ImageButton
+    private lateinit var adminButton: ImageButton
     private lateinit var cartCount: TextView
     private val cart = mutableListOf<CartProduct>()
 
@@ -30,9 +32,23 @@ class ProductCatalogActivity : AppCompatActivity() {
 
         recyclerView = findViewById(R.id.productsRecyclerView)
         cartButton = findViewById(R.id.cartButton)
+        adminButton = findViewById(R.id.adminButton)
         cartCount = findViewById(R.id.cartCount)
 
-        recyclerView.layoutManager = androidx.recyclerview.widget.GridLayoutManager(this, 2)
+        // Configurar visibilidad del botón de admin
+        val isAdmin = intent.getBooleanExtra("isAdmin", false)
+        if (isAdmin) {
+            adminButton.visibility = View.VISIBLE
+        } else {
+            adminButton.visibility = View.GONE
+        }
+
+        adminButton.setOnClickListener {
+            val intent = Intent(this, AdminActivity::class.java)
+            startActivity(intent)
+        }
+
+        recyclerView.layoutManager = GridLayoutManager(this, 2)
         recyclerView.adapter = ProductAdapter(ProductRepository.products) { product ->
             addToCart(product)
         }

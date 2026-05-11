@@ -3,9 +3,13 @@ package com.example.myapplication
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.view.View
 import android.widget.Button
 import android.widget.EditText
+import android.widget.FrameLayout
+import android.widget.ImageButton
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
@@ -23,10 +27,12 @@ class AdminActivity : AppCompatActivity() {
     private lateinit var etCategory: EditText
     private lateinit var etDescription: EditText
     private lateinit var ivPreview: ImageView
+    private lateinit var layoutPlaceholder: LinearLayout
+    private lateinit var containerImagePreview: FrameLayout
     private lateinit var tvImageLabel: TextView
-    private lateinit var btnPickImage: Button
     private lateinit var btnCreate: Button
     private lateinit var btnViewCatalog: Button
+    private lateinit var btnBack: ImageButton
     private lateinit var recyclerView: RecyclerView
     private lateinit var adminAdapter: ProductAdapter
 
@@ -35,15 +41,15 @@ class AdminActivity : AppCompatActivity() {
     private val pickImageLauncher =
         registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
             if (uri != null) {
-                // Tomar permiso persistente para poder usar el URI
                 try {
                     contentResolver.takePersistableUriPermission(
                         uri,
                         Intent.FLAG_GRANT_READ_URI_PERMISSION
                     )
-                } catch (_: SecurityException) { /* No todos los proveedores lo soportan */ }
+                } catch (_: SecurityException) {}
                 selectedImageUri = uri
                 ivPreview.setImageURI(uri)
+                layoutPlaceholder.visibility = View.GONE
                 tvImageLabel.text = "Imagen seleccionada"
             }
         }
@@ -63,28 +69,33 @@ class AdminActivity : AppCompatActivity() {
         etCategory    = findViewById(R.id.etCategory)
         etDescription = findViewById(R.id.etDescription)
         ivPreview     = findViewById(R.id.ivImagePreview)
+        layoutPlaceholder = findViewById(R.id.layoutPlaceholder)
+        containerImagePreview = findViewById(R.id.containerImagePreview)
         tvImageLabel  = findViewById(R.id.tvImageLabel)
-        btnPickImage  = findViewById(R.id.btnPickImage)
         btnCreate     = findViewById(R.id.btnCreateProduct)
         btnViewCatalog = findViewById(R.id.btnViewCatalog)
+        btnBack       = findViewById(R.id.btnBack)
         recyclerView  = findViewById(R.id.adminProductsRecycler)
 
         recyclerView.layoutManager = GridLayoutManager(this, 2)
-        adminAdapter = ProductAdapter(ProductRepository.products) { /* sin carrito en admin */ }
+        adminAdapter = ProductAdapter(ProductRepository.products) { /* sin acción en admin */ }
         recyclerView.adapter = adminAdapter
 
-        btnPickImage.setOnClickListener {
-            pickImageLauncher.launch("image/*")
+        // El contenedor es el único que activa la galería ahora
+        containerImagePreview.setOnClickListener { 
+            pickImageLauncher.launch("image/*") 
         }
 
         btnCreate.setOnClickListener {
             createProduct()
         }
 
+        btnBack.setOnClickListener {
+            finish()
+        }
+
         btnViewCatalog.setOnClickListener {
-            val intent = Intent(this, ProductCatalogActivity::class.java)
-            intent.putExtra("userEmail", "admin")
-            startActivity(intent)
+            finish()
         }
     }
 
@@ -117,13 +128,14 @@ class AdminActivity : AppCompatActivity() {
         ProductRepository.addProduct(newProduct)
         adminAdapter.notifyItemInserted(ProductRepository.products.size - 1)
 
-        // Limpiar formulario
+        // Limpiar formulario y restaurar placeholder
         etName.text.clear()
         etPrice.text.clear()
         etCategory.text.clear()
         etDescription.text.clear()
         ivPreview.setImageDrawable(null)
-        tvImageLabel.text = "Sin imagen seleccionada"
+        layoutPlaceholder.visibility = View.VISIBLE
+        tvImageLabel.text = "Formatos aceptados: JPG, PNG"
         selectedImageUri = null
 
         Toast.makeText(this, "Producto \"$name\" creado correctamente", Toast.LENGTH_SHORT).show()

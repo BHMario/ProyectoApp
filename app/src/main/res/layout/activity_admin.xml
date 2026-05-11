@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/backgroundColor">
@@ -14,29 +15,45 @@
         android:paddingBottom="40dp">
 
         <!-- Header Admin -->
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:gravity="center_horizontal"
             android:paddingBottom="24dp">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Panel Admin"
-                android:textSize="28sp"
-                android:textStyle="bold"
-                android:textColor="@color/primaryOrange" />
+            <ImageButton
+                android:id="@+id/btnBack"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:src="@android:drawable/ic_menu_revert"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="Volver"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true" />
 
-            <TextView
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="MangUP — Gestión de productos"
-                android:textSize="13sp"
-                android:textColor="@color/textSecondary"
-                android:layout_marginTop="4dp" />
-        </LinearLayout>
+                android:orientation="vertical"
+                android:layout_centerInParent="true"
+                android:gravity="center_horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Panel Admin"
+                    android:textSize="28sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/primaryOrange" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="MangUP — Gestión de productos"
+                    android:textSize="13sp"
+                    android:textColor="@color/textSecondary"
+                    android:layout_marginTop="4dp" />
+            </LinearLayout>
+        </RelativeLayout>
 
         <!-- Formulario crear producto -->
         <LinearLayout
@@ -147,35 +164,59 @@
                 android:textColor="@color/textSecondary"
                 android:layout_marginBottom="4dp" />
 
-            <!-- Preview imagen -->
-            <ImageView
-                android:id="@+id/ivImagePreview"
+            <!-- Preview imagen con Placeholder -->
+            <FrameLayout
+                android:id="@+id/containerImagePreview"
                 android:layout_width="match_parent"
-                android:layout_height="160dp"
-                android:scaleType="centerCrop"
-                android:background="@color/lightGray"
-                android:contentDescription="Vista previa de imagen"
-                android:layout_marginBottom="8dp" />
+                android:layout_height="180dp"
+                android:background="@drawable/edit_text_background"
+                android:layout_marginBottom="8dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?attr/selectableItemBackground">
+
+                <ImageView
+                    android:id="@+id/ivImagePreview"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop"
+                    android:contentDescription="Vista previa de imagen" />
+
+                <LinearLayout
+                    android:id="@+id/layoutPlaceholder"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:src="@android:drawable/ic_menu_camera"
+                        android:alpha="0.4"
+                        app:tint="@color/textHint"
+                        android:contentDescription="Icono cámara" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Toca para añadir foto"
+                        android:textColor="@color/textHint"
+                        android:textSize="12sp"
+                        android:layout_marginTop="8dp" />
+                </LinearLayout>
+            </FrameLayout>
 
             <TextView
                 android:id="@+id/tvImageLabel"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Sin imagen seleccionada"
+                android:text="Formatos aceptados: JPG, PNG"
                 android:textSize="11sp"
                 android:textColor="@color/textHint"
                 android:gravity="center"
-                android:layout_marginBottom="8dp" />
-
-            <Button
-                android:id="@+id/btnPickImage"
-                android:layout_width="match_parent"
-                android:layout_height="44dp"
-                android:text="Seleccionar imagen de galería"
-                android:textSize="13sp"
-                android:textColor="@color/primaryOrange"
-                android:background="@drawable/button_secondary_background"
-                android:layout_marginBottom="16dp" />
+                android:layout_marginBottom="24dp" />
 
             <!-- Botón crear -->
             <Button
@@ -189,22 +230,21 @@
                 android:background="@drawable/button_primary_background" />
         </LinearLayout>
 
-        <!-- Botón ver catálogo -->
+        <!-- Botón volver -->
         <Button
             android:id="@+id/btnViewCatalog"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:text="Ver Catálogo Completo"
+            android:text="Volver al Catálogo"
             android:textSize="14sp"
             android:textColor="@color/white"
-            android:background="@drawable/button_primary_background"
+            android:background="@drawable/button_secondary_background"
             android:layout_marginBottom="24dp" />
 
-        <!-- Lista de productos existentes -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Productos en catálogo"
+            android:text="Productos en gestión"
             android:textSize="16sp"
             android:textStyle="bold"
             android:textColor="@color/textPrimary"
