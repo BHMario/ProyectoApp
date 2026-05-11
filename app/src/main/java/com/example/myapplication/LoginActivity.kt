@@ -35,6 +35,14 @@ class LoginActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
+            // Comprobar credenciales de admin
+            if (email == "admin" && password == "admin") {
+                val intent = Intent(this, AdminActivity::class.java)
+                startActivity(intent)
+                finish()
+                return@setOnClickListener
+            }
+
             // Navegar a ProductCatalogActivity si pasa la validación
             val intent = Intent(this, ProductCatalogActivity::class.java)
             intent.putExtra("userEmail", email)

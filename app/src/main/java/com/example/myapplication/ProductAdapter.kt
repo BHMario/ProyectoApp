@@ -3,7 +3,9 @@ package com.example.myapplication
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import android.net.Uri
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.TextView
 
 class ProductAdapter(
@@ -17,6 +19,7 @@ class ProductAdapter(
         private val descriptionTextView: TextView = itemView.findViewById(R.id.productDescription)
         private val categoryTextView: TextView = itemView.findViewById(R.id.categoryBadge)
         private val addButton: Button = itemView.findViewById(R.id.addToCartButton)
+        private val productImage: ImageView = itemView.findViewById(R.id.productImage)
 
         fun bind(product: Product) {
             nameTextView.text = product.name
@@ -25,6 +28,14 @@ class ProductAdapter(
             categoryTextView.text = product.category
             addButton.setOnClickListener {
                 onAddToCart(product)
+            }
+            if (product.imageUri.isNotEmpty()) {
+                productImage.setImageURI(Uri.parse(product.imageUri))
+            } else {
+                productImage.setImageDrawable(null)
+                productImage.setBackgroundColor(
+                    itemView.context.getColor(R.color.lightGray)
+                )
             }
         }
     }
