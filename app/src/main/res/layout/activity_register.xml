@@ -20,37 +20,34 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:gravity="center_horizontal"
-            android:paddingBottom="40dp">
+            android:paddingBottom="32dp">
 
-            <!-- Logo -->
             <ImageView
-                android:id="@+id/logoImageView"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
                 android:src="@drawable/ic_launcher_foreground"
-                android:contentDescription="Logo de MangUP"
+                android:contentDescription="Logo MangUP"
                 android:scaleType="centerInside"
-                android:layout_marginBottom="20dp" />
+                android:layout_marginBottom="12dp" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="MangUP"
-                android:textSize="36sp"
+                android:textSize="32sp"
                 android:textStyle="bold"
                 android:textColor="@color/primaryOrange" />
 
-            <!-- Subtitulo -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Tu ecommerce de anime"
+                android:text="Crear cuenta nueva"
                 android:textSize="14sp"
                 android:textColor="@color/textSecondary"
-                android:layout_marginTop="6dp" />
+                android:layout_marginTop="4dp" />
         </LinearLayout>
 
-        <!-- Login -->
+        <!-- Register Card -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -59,30 +56,74 @@
             android:padding="24dp"
             android:layout_marginBottom="24dp">
 
-            <!-- Email -->
+            <!-- Nombre -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Correo electrónico o Usuario"
+                android:text="Nombre completo"
                 android:textSize="14sp"
                 android:textStyle="bold"
                 android:textColor="@color/textPrimary"
                 android:layout_marginBottom="8dp" />
 
             <EditText
-                android:id="@+id/loginEditText"
+                android:id="@+id/registerNameEditText"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:hint="Tu nombre"
+                android:paddingHorizontal="14dp"
+                android:inputType="textPersonName|textCapWords"
+                android:background="@drawable/edit_text_background"
+                android:textSize="16sp"
+                android:textColor="@color/textPrimary"
+                android:textColorHint="@color/textHint"
+                android:layout_marginBottom="20dp" />
+
+            <!-- Email -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Correo electrónico"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:textColor="@color/textPrimary"
+                android:layout_marginBottom="8dp" />
+
+            <EditText
+                android:id="@+id/registerEmailEditText"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:hint="nombre@ejemplo.com"
                 android:paddingHorizontal="14dp"
-                android:paddingVertical="12dp"
                 android:inputType="textEmailAddress"
                 android:background="@drawable/edit_text_background"
                 android:textSize="16sp"
                 android:textColor="@color/textPrimary"
                 android:textColorHint="@color/textHint"
-                android:layout_marginBottom="20dp"
-                android:fontFamily="sans-serif" />
+                android:layout_marginBottom="20dp" />
+
+            <!-- Teléfono (opcional) -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Teléfono (opcional)"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:textColor="@color/textPrimary"
+                android:layout_marginBottom="8dp" />
+
+            <EditText
+                android:id="@+id/registerPhoneEditText"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:hint="+34 000 000 000"
+                android:paddingHorizontal="14dp"
+                android:inputType="phone"
+                android:background="@drawable/edit_text_background"
+                android:textSize="16sp"
+                android:textColor="@color/textPrimary"
+                android:textColorHint="@color/textHint"
+                android:layout_marginBottom="20dp" />
 
             <!-- Contraseña -->
             <TextView
@@ -95,50 +136,70 @@
                 android:layout_marginBottom="8dp" />
 
             <EditText
-                android:id="@+id/passwordEditText"
+                android:id="@+id/registerPasswordEditText"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:hint="••••••••"
+                android:hint="Mínimo 6 caracteres"
                 android:paddingHorizontal="14dp"
-                android:paddingVertical="12dp"
                 android:inputType="textPassword"
                 android:background="@drawable/edit_text_background"
                 android:textSize="16sp"
                 android:textColor="@color/textPrimary"
                 android:textColorHint="@color/textHint"
-                android:layout_marginBottom="24dp"
-                android:fontFamily="sans-serif" />
+                android:layout_marginBottom="20dp" />
 
-            <!-- Botón Login -->
+            <!-- Confirmar Contraseña -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Confirmar contraseña"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:textColor="@color/textPrimary"
+                android:layout_marginBottom="8dp" />
+
+            <EditText
+                android:id="@+id/registerConfirmPasswordEditText"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:hint="Repite tu contraseña"
+                android:paddingHorizontal="14dp"
+                android:inputType="textPassword"
+                android:background="@drawable/edit_text_background"
+                android:textSize="16sp"
+                android:textColor="@color/textPrimary"
+                android:textColorHint="@color/textHint"
+                android:layout_marginBottom="24dp" />
+
+            <!-- Botón Registrarse -->
             <Button
-                android:id="@+id/loginButton"
+                android:id="@+id/registerButton"
                 style="@style/ButtonPrimary"
                 android:layout_height="50dp"
-                android:text="Iniciar Sesión"
+                android:text="Crear cuenta"
                 android:layout_marginBottom="12dp" />
 
         </LinearLayout>
 
-        <!-- Link a Registro -->
+        <!-- Link a Login -->
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:gravity="center_vertical"
-            android:layout_marginTop="8dp">
+            android:gravity="center_vertical">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="¿No tienes cuenta? "
+                android:text="¿Ya tienes cuenta? "
                 android:textSize="14sp"
                 android:textColor="@color/textSecondary" />
 
             <TextView
-                android:id="@+id/registerLink"
+                android:id="@+id/loginLink"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Regístrate"
+                android:text="Inicia sesión"
                 android:textSize="14sp"
                 android:textStyle="bold"
                 android:textColor="@color/primaryOrange"

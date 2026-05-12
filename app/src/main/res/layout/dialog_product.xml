@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="16dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <!-- Name -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Nombre del producto *"
+            android:textSize="13sp"
+            android:textColor="#666666"
+            android:layout_marginBottom="4dp" />
+
+        <EditText
+            android:id="@+id/dialogProductName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Ej: Manga Naruto Vol 1"
+            android:inputType="text"
+            android:maxLines="1"
+            android:background="@drawable/edit_text_background"
+            android:padding="12dp"
+            android:layout_marginBottom="12dp" />
+
+        <!-- Price -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Precio (€) *"
+            android:textSize="13sp"
+            android:textColor="#666666"
+            android:layout_marginBottom="4dp" />
+
+        <EditText
+            android:id="@+id/dialogProductPrice"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Ej: 12.99"
+            android:inputType="numberDecimal"
+            android:maxLines="1"
+            android:background="@drawable/edit_text_background"
+            android:padding="12dp"
+            android:layout_marginBottom="12dp" />
+
+        <!-- Category -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Categoría *"
+            android:textSize="13sp"
+            android:textColor="#666666"
+            android:layout_marginBottom="4dp" />
+
+        <Spinner
+            android:id="@+id/dialogProductCategory"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:background="@drawable/edit_text_background"
+            android:paddingHorizontal="12dp"
+            android:layout_marginBottom="12dp" />
+
+        <!-- Stock -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Stock"
+            android:textSize="13sp"
+            android:textColor="#666666"
+            android:layout_marginBottom="4dp" />
+
+        <EditText
+            android:id="@+id/dialogProductStock"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Ej: 10"
+            android:inputType="number"
+            android:maxLines="1"
+            android:background="@drawable/edit_text_background"
+            android:padding="12dp"
+            android:layout_marginBottom="12dp" />
+
+        <!-- Description -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Descripción"
+            android:textSize="13sp"
+            android:textColor="#666666"
+            android:layout_marginBottom="4dp" />
+
+        <EditText
+            android:id="@+id/dialogProductDesc"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Descripción breve del producto"
+            android:inputType="textMultiLine"
+            android:minLines="2"
+            android:maxLines="4"
+            android:gravity="top"
+            android:background="@drawable/edit_text_background"
+            android:padding="12dp"
+            android:layout_marginBottom="4dp" />
+
+    </LinearLayout>
+</ScrollView>
