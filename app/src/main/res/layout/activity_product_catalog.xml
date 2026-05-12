@@ -35,7 +35,7 @@
                 android:textStyle="bold"
                 android:textColor="@color/white" />
 
-            <ImageButton
+            <FrameLayout
                 android:id="@+id/adminButton"
                 android:layout_width="48dp"
                 android:layout_height="48dp">
