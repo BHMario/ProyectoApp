@@ -8,16 +8,47 @@
     android:layout_margin="6dp">
 
     <!-- Product Image -->
-    <ImageView
-        android:id="@+id/productImage"
+    <FrameLayout
         android:layout_width="0dp"
-        android:layout_height="140dp"
-        android:scaleType="centerCrop"
-        android:background="@color/lightGray"
-        android:contentDescription="Imagen de producto"
+        android:layout_height="160dp"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <ImageView
+            android:id="@+id/productImage"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            android:background="@color/lightGray"
+            android:contentDescription="Imagen de producto" />
+
+        <LinearLayout
+            android:id="@+id/productImagePlaceholder"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@android:drawable/ic_menu_camera"
+                android:alpha="0.3"
+                android:tint="@color/gray"
+                android:contentDescription="Sin imagen" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Sin imagen"
+                android:textColor="@color/textHint"
+                android:textSize="10sp"
+                android:layout_marginTop="4dp" />
+        </LinearLayout>
+    </FrameLayout>
 
     <!-- Category Badge — overlaid on top-right corner of image -->
     <TextView
