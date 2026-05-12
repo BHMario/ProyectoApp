@@ -9,6 +9,7 @@ data class Product(
     val price: Double,
     val category: String,
     val description: String,
+    val stock: Int = 0,
     val imageUri: String = ""
 ) : Parcelable {
     constructor(parcel: Parcel) : this(
@@ -17,6 +18,7 @@ data class Product(
         parcel.readDouble(),
         parcel.readString() ?: "",
         parcel.readString() ?: "",
+        parcel.readInt(),
         parcel.readString() ?: ""
     )
 
@@ -26,6 +28,7 @@ data class Product(
         parcel.writeDouble(price)
         parcel.writeString(category)
         parcel.writeString(description)
+        parcel.writeInt(stock)
         parcel.writeString(imageUri)
     }
 
@@ -36,3 +39,4 @@ data class Product(
         override fun newArray(size: Int) = arrayOfNulls<Product>(size)
     }
 }
+
