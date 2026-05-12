@@ -2,31 +2,32 @@ package com.example.myapplication
 
 import android.content.Intent
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
+import android.widget.EditText
 import android.widget.ImageButton
+import android.widget.RadioGroup
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class ProductCatalogActivity : AppCompatActivity() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var cartButton: ImageButton
     private lateinit var cartCount: TextView
+    private lateinit var searchEditText: EditText
+    private lateinit var filterChipGroup: RadioGroup
+    private lateinit var emptyResultsText: TextView
+    private lateinit var bottomNav: BottomNavigationView
+    private lateinit var viewModel: ProductViewModel
+
     private val cart = mutableListOf<CartProduct>()
-    private val products = listOf(
-        Product(1, "Manga Jujutsu Kaisen Vol 1", 12.99, "Manga", "Primer volumen de la popular serie Jujutsu Kaisen"),
-        Product(2, "Figura Akatsuki", 24.99, "Figuras", "Figura articulada de personaje Akatsuki"),
-        Product(3, "Camiseta Naruto", 18.99, "Merchandising", "Camiseta 100% algodón con diseño de Naruto"),
-        Product(4, "Manga One Piece Vol 5", 13.99, "Manga", "Quinto volumen de la saga One Piece"),
-        Product(5, "Figura Demon Slayer", 29.99, "Figuras", "Figura premium de Tanjiro en acción"),
-        Product(6, "Mochila Anime", 32.99, "Merchandising", "Mochila con diseños exclusivos anime"),
-        Product(7, "Manga My Hero Vol 3", 12.99, "Manga", "Tercer volumen de My Hero Academia"),
-        Product(8, "Gorro Sailor Moon", 16.99, "Merchandising", "Gorro de invierno con logo Sailor Moon")
-    )
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,44 +39,87 @@ class ProductCatalogActivity : AppCompatActivity() {
             insets
         }
 
-        recyclerView = findViewById(R.id.productsRecyclerView)
-        cartButton = findViewById(R.id.cartButton)
-        cartCount = findViewById(R.id.cartCount)
+        viewModel = ViewModelProvider(this)[ProductViewModel::class.java]
 
-        recyclerView.layoutManager = androidx.recyclerview.widget.GridLayoutManager(this, 2)
-        recyclerView.adapter = ProductAdapter(products) { product ->
-            addToCart(product)
+        recyclerView      = findViewById(R.id.productsRecyclerView)
+        cartButton        = findViewById(R.id.cartButton)
+        cartCount         = findViewById(R.id.cartCount)
+        searchEditText    = findViewById(R.id.searchEditText)
+        filterChipGroup   = findViewById(R.id.filterChipGroup)
+        emptyResultsText  = findViewById(R.id.emptyResultsText)
+        bottomNav         = findViewById(R.id.bottomNavigation)
+
+        recyclerView.layoutManager = GridLayoutManager(this, 2)
+        applyFilters()
+
+        cartButton.setOnClickListener { openCart() }
+
+        searchEditText.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                viewModel.setSearch(s?.toString()?.trim() ?: "")
+                applyFilters()
+            }
+            override fun afterTextChanged(s: Editable?) {}
+        })
+
+        filterChipGroup.setOnCheckedChangeListener { _, checkedId ->
+            val category = when (checkedId) {
+                R.id.chipManga          -> "Manga"
+                R.id.chipFiguras        -> "Figuras"
+                R.id.chipMerchandising  -> "Merchandising"
+                else                    -> "Todos"
+            }
+            viewModel.setFilter(category)
+            applyFilters()
         }
 
-        cartButton.setOnClickListener {
-            val intent = Intent(this, CartActivity::class.java)
-            intent.putParcelableArrayListExtra("cartItems", ArrayList(cart))
-            startActivityForResult(intent, CART_REQUEST_CODE)
+        bottomNav.selectedItemId = R.id.nav_home
+        bottomNav.setOnItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.nav_home    -> true
+                R.id.nav_cart    -> { openCart(); true }
+                R.id.nav_profile -> { startActivity(Intent(this, ProfileActivity::class.java)); true }
+                else             -> false
+            }
+        }
+    }
+
+    private fun applyFilters() {
+        val products = viewModel.getFilteredProducts()
+        if (products.isEmpty()) {
+            recyclerView.visibility     = android.view.View.GONE
+            emptyResultsText.visibility = android.view.View.VISIBLE
+        } else {
+            recyclerView.visibility     = android.view.View.VISIBLE
+            emptyResultsText.visibility = android.view.View.GONE
+            recyclerView.adapter = ProductAdapter(products) { addToCart(it) }
         }
     }
 
     private fun addToCart(product: Product) {
-        val existingItem = cart.find { it.product.id == product.id }
-        if (existingItem != null) {
-            existingItem.quantity++
-        } else {
-            cart.add(CartProduct(product, 1))
-        }
+        val existing = cart.find { it.product.id == product.id }
+        if (existing != null) existing.quantity++ else cart.add(CartProduct(product, 1))
         updateCartButton()
     }
 
+    private fun openCart() {
+        val intent = Intent(this, CartActivity::class.java)
+        intent.putParcelableArrayListExtra("cartItems", ArrayList(cart))
+        startActivityForResult(intent, CART_REQUEST_CODE)
+    }
+
     private fun updateCartButton() {
-        val totalItems = cart.sumOf { it.quantity }
-        cartCount.text = totalItems.toString()
+        cartCount.text = cart.sumOf { it.quantity }.toString()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == CART_REQUEST_CODE && data != null) {
             @Suppress("UNCHECKED_CAST")
-            val updatedCart = data.getParcelableArrayListExtra<CartProduct>("cartItems") as? ArrayList<CartProduct> ?: ArrayList()
+            val updated = data.getParcelableArrayListExtra<CartProduct>("cartItems") as? ArrayList<CartProduct> ?: ArrayList()
             cart.clear()
-            cart.addAll(updatedCart)
+            cart.addAll(updated)
             updateCartButton()
         }
     }
@@ -84,3 +128,5 @@ class ProductCatalogActivity : AppCompatActivity() {
         private const val CART_REQUEST_CODE = 100
     }
 }
+
+

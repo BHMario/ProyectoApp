@@ -22,12 +22,26 @@
         </activity>
 
         <activity
+            android:name=".RegisterActivity"
+            android:exported="false" />
+
+        <activity
             android:name=".ProductCatalogActivity"
             android:exported="false" />
 
         <activity
             android:name=".CartActivity"
             android:exported="false" />
+
+        <activity
+            android:name=".ProfileActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".AdminActivity"
+            android:exported="false"
+            android:label="Panel Admin" />
+
     </application>
 
 </manifest>
