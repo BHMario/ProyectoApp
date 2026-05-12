@@ -20,6 +20,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 class ProductCatalogActivity : AppCompatActivity() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var cartButton: ImageButton
+    private lateinit var adminButton: ImageButton
     private lateinit var cartCount: TextView
     private lateinit var searchEditText: EditText
     private lateinit var filterChipGroup: RadioGroup
