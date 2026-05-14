@@ -1,12 +1,15 @@
 package com.example.myapplication
 
-import android.view.LayoutInflater
-import android.view.ViewGroup
-import androidx.recyclerview.widget.RecyclerView
+import android.graphics.BitmapFactory
 import android.net.Uri
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.recyclerview.widget.RecyclerView
 
 class ProductAdapter(
     private val products: List<Product>,
@@ -21,13 +24,14 @@ class ProductAdapter(
         private val categoryTextView: TextView = itemView.findViewById(R.id.categoryBadge)
         private val addButton: Button = itemView.findViewById(R.id.addToCartButton)
         private val productImage: ImageView = itemView.findViewById(R.id.productImage)
+        private val imagePlaceholder: LinearLayout = itemView.findViewById(R.id.productImagePlaceholder)
 
         fun bind(product: Product) {
             nameTextView.text = product.name
             priceTextView.text = "$${String.format("%.2f", product.price)}"
             descriptionTextView.text = product.description
             categoryTextView.text = product.category
-            
+          
             itemView.setOnClickListener {
                 onProductClick(product)
             }
@@ -42,7 +46,37 @@ class ProductAdapter(
                 productImage.setBackgroundColor(
                     itemView.context.getColor(R.color.lightGray)
                 )
+                
+            addButton.setOnClickListener { onAddToCart(product) }
+            loadImage(product.imageUri)
+        }
+
+        private fun loadImage(uri: String) {
+            when {
+                uri.startsWith("assets://") -> {
+                    val assetPath = uri.removePrefix("assets://")
+                    try {
+                        val stream = itemView.context.assets.open(assetPath)
+                        val bitmap = BitmapFactory.decodeStream(stream)
+                        stream.close()
+                        productImage.setImageBitmap(bitmap)
+                        imagePlaceholder.visibility = View.GONE
+                    } catch (_: Exception) {
+                        showPlaceholder()
+                    }
+                }
+                uri.isNotEmpty() -> {
+                    productImage.setImageURI(Uri.parse(uri))
+                    imagePlaceholder.visibility = View.GONE
+                }
+                else -> showPlaceholder()
             }
+        }
+
+        private fun showPlaceholder() {
+            productImage.setImageDrawable(null)
+            productImage.setBackgroundColor(itemView.context.getColor(R.color.lightGray))
+            imagePlaceholder.visibility = View.VISIBLE
         }
     }
 
