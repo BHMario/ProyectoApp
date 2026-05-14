@@ -11,8 +11,8 @@ class DatabaseHelper(context: Context) :
 
     companion object {
         const val DATABASE_NAME = "mangup.db"
-        // v1: initial schema | v2: adds stock column to products
-        const val DATABASE_VERSION = 2
+        // v1: schema | v2: stock | v3: image_uri
+        const val DATABASE_VERSION = 3
 
         // ---- Tables ----
         private const val TABLE_USERS = "users"
@@ -49,7 +49,8 @@ class DatabaseHelper(context: Context) :
                 price       REAL    NOT NULL,
                 category    TEXT    NOT NULL,
                 description TEXT,
-                stock       INTEGER DEFAULT 0
+                stock       INTEGER DEFAULT 0,
+                image_uri   TEXT
             )
         """.trimIndent())
 
@@ -83,9 +84,33 @@ class DatabaseHelper(context: Context) :
     }
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
-        // Migration v1 → v2: add stock column
         if (oldVersion < 2) {
             db.execSQL("ALTER TABLE $TABLE_PRODUCTS ADD COLUMN stock INTEGER DEFAULT 0")
+        }
+        if (oldVersion < 3) {
+            db.execSQL("ALTER TABLE $TABLE_PRODUCTS ADD COLUMN image_uri TEXT")
+            // Actualizar datos existentes con las rutas de assets si es necesario
+            seedProductsImages(db)
+        }
+    }
+
+    private fun seedProductsImages(db: SQLiteDatabase) {
+        // Mapeo simple para actualizar productos existentes por nombre
+        val updates = mapOf(
+            "Manga Jujutsu Kaisen Vol 1" to "assets://images/jujutsu_kaisen_vol1.png",
+            "Figura Akatsuki"            to "assets://images/figura_akatsuki.png",
+            "Camiseta Naruto"             to "assets://images/camiseta_naruto.png",
+            "Manga One Piece Vol 5"       to "assets://images/one_piece_vol5.png",
+            "Figura Demon Slayer"         to "assets://images/figura_demon_slayer.png",
+            "Mochila Anime"               to "assets://images/mochila_anime.png",
+            "Manga My Hero Vol 3"         to "assets://images/my_hero_vol3.png",
+            "Gorro Sailor Moon"           to "assets://images/gorro_sailor_moon.png",
+            "Manga Dragon Ball Vol 1"     to "assets://images/jujutsu_kaisen_vol1.png", // Usando JJK como temporal si no hay DB1
+            "Figura Gojo Satoru"          to "assets://images/jujutsu_kaisen_vol1.png",
+            "Manga Bleach Vol 2"          to "assets://images/jujutsu_kaisen_vol1.png"
+        )
+        updates.forEach { (name, uri) ->
+            db.execSQL("UPDATE $TABLE_PRODUCTS SET image_uri = ? WHERE name = ?", arrayOf(uri, name))
         }
     }
 
@@ -108,18 +133,18 @@ class DatabaseHelper(context: Context) :
 
     private fun seedProducts(db: SQLiteDatabase) {
         val rows = listOf(
-            listOf("Manga Jujutsu Kaisen Vol 1", 12.99, "Manga",         "Primer volumen de Jujutsu Kaisen",        15),
-            listOf("Figura Akatsuki",            24.99, "Figuras",        "Figura articulada Akatsuki",              8),
-            listOf("Camiseta Naruto",             18.99, "Merchandising", "Camiseta 100% algodón diseño Naruto",     20),
-            listOf("Manga One Piece Vol 5",       13.99, "Manga",         "Quinto volumen de One Piece",             10),
-            listOf("Figura Demon Slayer",         29.99, "Figuras",        "Figura premium de Tanjiro en acción",     5),
-            listOf("Mochila Anime",               32.99, "Merchandising", "Mochila con diseños exclusivos anime",    12),
-            listOf("Manga My Hero Vol 3",         12.99, "Manga",         "Tercer volumen de My Hero Academia",      18),
-            listOf("Gorro Sailor Moon",           16.99, "Merchandising", "Gorro de invierno con logo Sailor Moon",  7),
-            listOf("Manga Dragon Ball Vol 1",     11.99, "Manga",         "El inicio de la aventura de Goku",        14),
-            listOf("Figura Gojo Satoru",          34.99, "Figuras",        "Figura premium de Gojo con efectos",      4),
-            listOf("Taza Ataque a los Titanes",    9.99, "Merchandising", "Taza cerámica diseño exclusivo",          25),
-            listOf("Manga Bleach Vol 2",          12.99, "Manga",         "Segundo volumen de Bleach",               11)
+            listOf("Manga Jujutsu Kaisen Vol 1", 12.99, "Manga",         "Primer volumen de Jujutsu Kaisen",        15, "assets://images/jujutsu_kaisen_vol1.png"),
+            listOf("Figura Akatsuki",            24.99, "Figuras",        "Figura articulada Akatsuki",              8,  "assets://images/figura_akatsuki.png"),
+            listOf("Camiseta Naruto",             18.99, "Merchandising", "Camiseta 100% algodón diseño Naruto",     20, "assets://images/camiseta_naruto.png"),
+            listOf("Manga One Piece Vol 5",       13.99, "Manga",         "Quinto volumen de One Piece",             10, "assets://images/one_piece_vol5.png"),
+            listOf("Figura Demon Slayer",         29.99, "Figuras",        "Figura premium de Tanjiro en acción",     5,  "assets://images/figura_demon_slayer.png"),
+            listOf("Mochila Anime",               32.99, "Merchandising", "Mochila con diseños exclusivos anime",    12, "assets://images/mochila_anime.png"),
+            listOf("Manga My Hero Vol 3",         12.99, "Manga",         "Tercer volumen de My Hero Academia",      18, "assets://images/my_hero_vol3.png"),
+            listOf("Gorro Sailor Moon",           16.99, "Merchandising", "Gorro de invierno con logo Sailor Moon",  7,  "assets://images/gorro_sailor_moon.png"),
+            listOf("Manga Dragon Ball Vol 1",     11.99, "Manga",         "El inicio de la aventura de Goku",        14, "assets://images/jujutsu_kaisen_vol1.png"),
+            listOf("Figura Gojo Satoru",          34.99, "Figuras",        "Figura premium de Gojo con efectos",      4,  "assets://images/jujutsu_kaisen_vol1.png"),
+            listOf("Taza Ataque a los Titanes",    9.99, "Merchandising", "Taza cerámica diseño exclusivo",          25, "assets://images/mochila_anime.png"),
+            listOf("Manga Bleach Vol 2",          12.99, "Manga",         "Segundo volumen de Bleach",               11, "assets://images/jujutsu_kaisen_vol1.png")
         )
         rows.forEach { r ->
             db.insert(TABLE_PRODUCTS, null, ContentValues().apply {
@@ -128,6 +153,7 @@ class DatabaseHelper(context: Context) :
                 put("category",    r[2] as String)
                 put("description", r[3] as String)
                 put("stock",       r[4] as Int)
+                put("image_uri",   r[5] as String)
             })
         }
     }
@@ -186,7 +212,8 @@ class DatabaseHelper(context: Context) :
                         price       = c.getDouble(c.getColumnIndexOrThrow("price")),
                         category    = c.getString(c.getColumnIndexOrThrow("category")),
                         description = c.getString(c.getColumnIndexOrThrow("description")) ?: "",
-                        stock       = c.getInt(c.getColumnIndexOrThrow("stock"))
+                        stock       = c.getInt(c.getColumnIndexOrThrow("stock")),
+                        imageUri    = c.getString(c.getColumnIndexOrThrow("image_uri")) ?: ""
                     )
                 )
             }
@@ -211,6 +238,7 @@ class DatabaseHelper(context: Context) :
         put("category",    p.category)
         put("description", p.description)
         put("stock",       p.stock)
+        put("image_uri",   p.imageUri)
     }
 
     // ─────────────────────────────── ORDERS ───────────────────────────────── //
