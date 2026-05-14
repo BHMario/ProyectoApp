@@ -42,6 +42,11 @@
             android:exported="false"
             android:label="Panel Admin" />
 
+        <activity
+            android:name=".ProductDetailActivity"
+            android:exported="false"
+            android:label="Detalle del Producto" />
+
     </application>
 
 </manifest>

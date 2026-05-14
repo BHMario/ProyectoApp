@@ -8,7 +8,8 @@ import android.widget.TextView
 
 class CartAdapter(
     private val cartItems: MutableList<CartProduct>,
-    private val onUpdateCart: () -> Unit
+    private val onUpdateCart: () -> Unit,
+    private val onProductClick: (Product) -> Unit
 ) : RecyclerView.Adapter<CartAdapter.CartViewHolder>() {
 
     inner class CartViewHolder(itemView: android.view.View) : RecyclerView.ViewHolder(itemView) {
@@ -23,6 +24,10 @@ class CartAdapter(
             nameTextView.text = cartProduct.product.name
             priceTextView.text = "$${String.format("%.2f", cartProduct.getTotalPrice())}"
             quantityTextView.text = cartProduct.quantity.toString()
+
+            itemView.setOnClickListener {
+                onProductClick(cartProduct.product)
+            }
 
             decrementButton.setOnClickListener {
                 if (cartProduct.quantity > 1) {
@@ -39,6 +44,8 @@ class CartAdapter(
             }
 
             removeButton.setOnClickListener {
+                val itemToRemove = cartItems[adapterPosition]
+                CartManager.removeProduct(itemToRemove.product)
                 cartItems.removeAt(adapterPosition)
                 notifyItemRemoved(adapterPosition)
                 onUpdateCart()

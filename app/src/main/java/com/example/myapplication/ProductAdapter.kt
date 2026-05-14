@@ -10,7 +10,8 @@ import android.widget.TextView
 
 class ProductAdapter(
     private val products: List<Product>,
-    private val onAddToCart: (Product) -> Unit
+    private val onAddToCart: (Product) -> Unit,
+    private val onProductClick: (Product) -> Unit
 ) : RecyclerView.Adapter<ProductAdapter.ProductViewHolder>() {
 
     inner class ProductViewHolder(itemView: android.view.View) : RecyclerView.ViewHolder(itemView) {
@@ -26,6 +27,11 @@ class ProductAdapter(
             priceTextView.text = "$${String.format("%.2f", product.price)}"
             descriptionTextView.text = product.description
             categoryTextView.text = product.category
+            
+            itemView.setOnClickListener {
+                onProductClick(product)
+            }
+
             addButton.setOnClickListener {
                 onAddToCart(product)
             }
