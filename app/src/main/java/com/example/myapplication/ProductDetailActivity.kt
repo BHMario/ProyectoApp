@@ -1,5 +1,6 @@
 package com.example.myapplication
 
+import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
@@ -47,10 +48,33 @@ class ProductDetailActivity : AppCompatActivity() {
         productStock.text = "Stock disponible: ${product.stock}"
         productDescription.text = product.description
 
-        if (product.imageUri.isNotEmpty()) {
-            productImage.setImageURI(Uri.parse(product.imageUri))
+        loadImage(product.imageUri, productImage)
+    }
+
+    private fun loadImage(uri: String, imageView: ImageView) {
+        if (uri.isEmpty()) {
+            imageView.setBackgroundColor(getColor(R.color.lightGray))
+            return
+        }
+
+        if (uri.startsWith("assets://")) {
+            val assetPath = uri.removePrefix("assets://")
+            try {
+                val stream = assets.open(assetPath)
+                val bitmap = BitmapFactory.decodeStream(stream)
+                stream.close()
+                imageView.setImageBitmap(bitmap)
+                imageView.background = null
+            } catch (e: Exception) {
+                imageView.setBackgroundColor(getColor(R.color.lightGray))
+            }
         } else {
-            productImage.setBackgroundColor(getColor(R.color.lightGray))
+            try {
+                imageView.setImageURI(Uri.parse(uri))
+                imageView.background = null
+            } catch (e: Exception) {
+                imageView.setBackgroundColor(getColor(R.color.lightGray))
+            }
         }
     }
 
