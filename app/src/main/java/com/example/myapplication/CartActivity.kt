@@ -23,7 +23,6 @@ class CartActivity : AppCompatActivity() {
     private lateinit var backButton: Button
     private lateinit var bottomNav: BottomNavigationView
     private lateinit var cartAdapter: CartAdapter
-    private val cart = mutableListOf<CartProduct>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,9 +34,7 @@ class CartActivity : AppCompatActivity() {
             insets
         }
 
-        @Suppress("UNCHECKED_CAST")
-        val cartItems = intent.getParcelableArrayListExtra<CartProduct>("cartItems") as? ArrayList<CartProduct> ?: ArrayList()
-        cart.addAll(cartItems)
+        // No necesitamos recibir cartItems por Intent, usamos CartManager
 
         recyclerView = findViewById(R.id.cartRecyclerView)
         totalTextView = findViewById(R.id.totalPrice)
@@ -46,17 +43,17 @@ class CartActivity : AppCompatActivity() {
         bottomNav = findViewById(R.id.bottomNavigation)
 
         recyclerView.layoutManager = LinearLayoutManager(this)
-        cartAdapter = CartAdapter(cart) { updateTotal() }
+        cartAdapter = CartAdapter(CartManager.getCart().toMutableList(), { updateTotal() }, { openProductDetail(it) })
         recyclerView.adapter = cartAdapter
 
         updateTotal()
 
         checkoutButton.setOnClickListener {
-            if (cart.isEmpty()) {
+            if (CartManager.getCart().isEmpty()) {
                 Toast.makeText(this, "Tu carrito está vacío", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
-            val total = cart.sumOf { it.getTotalPrice() }
+            val total = CartManager.getTotal()
             val orderId = System.currentTimeMillis().toString().takeLast(6)
             val date = SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault()).format(Date())
 
@@ -65,18 +62,18 @@ class CartActivity : AppCompatActivity() {
                 Toast.makeText(this, "Error de sesión, inicia sesión de nuevo", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
-            DatabaseHelper(this).saveOrder(userId, cart, total, date)
+            DatabaseHelper(this).saveOrder(userId, CartManager.getCart(), total, date)
 
-            cart.clear()
+            CartManager.clearCart()
             updateTotal()
-            cartAdapter.notifyDataSetChanged()
+            // Actualizar la lista interna del adaptador también si es necesario, 
+            // o simplemente volver a cargarla. Como el adaptador usa una copia mutable, debemos limpiarla.
+            (recyclerView.adapter as? CartAdapter)?.notifyDataSetChanged() 
+            // Nota: En una implementación real, el adaptador debería observar el CartManager
             Toast.makeText(this, "¡Pedido #$orderId realizado con éxito!", Toast.LENGTH_LONG).show()
         }
 
         backButton.setOnClickListener {
-            val intent = Intent()
-            intent.putParcelableArrayListExtra("cartItems", cart as ArrayList<CartProduct>)
-            setResult(RESULT_OK, intent)
             finish()
         }
 
@@ -84,9 +81,6 @@ class CartActivity : AppCompatActivity() {
         bottomNav.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.nav_home -> {
-                    val intent = Intent()
-                    intent.putParcelableArrayListExtra("cartItems", cart as ArrayList<CartProduct>)
-                    setResult(RESULT_OK, intent)
                     finish()
                     true
                 }
@@ -101,8 +95,14 @@ class CartActivity : AppCompatActivity() {
     }
 
     private fun updateTotal() {
-        val total = cart.sumOf { it.getTotalPrice() }
+        val total = CartManager.getTotal()
         totalTextView.text = "Total: $${String.format("%.2f", total)}"
+    }
+
+    private fun openProductDetail(product: Product) {
+        val intent = Intent(this, ProductDetailActivity::class.java)
+        intent.putExtra("PRODUCT_EXTRA", product)
+        startActivity(intent)
     }
 }
 

@@ -13,7 +13,8 @@ import androidx.recyclerview.widget.RecyclerView
 
 class ProductAdapter(
     private val products: List<Product>,
-    private val onAddToCart: (Product) -> Unit
+    private val onAddToCart: (Product) -> Unit,
+    private val onProductClick: (Product) -> Unit
 ) : RecyclerView.Adapter<ProductAdapter.ProductViewHolder>() {
 
     inner class ProductViewHolder(itemView: android.view.View) : RecyclerView.ViewHolder(itemView) {
@@ -30,6 +31,22 @@ class ProductAdapter(
             priceTextView.text = "$${String.format("%.2f", product.price)}"
             descriptionTextView.text = product.description
             categoryTextView.text = product.category
+          
+            itemView.setOnClickListener {
+                onProductClick(product)
+            }
+
+            addButton.setOnClickListener {
+                onAddToCart(product)
+            }
+            if (product.imageUri.isNotEmpty()) {
+                productImage.setImageURI(Uri.parse(product.imageUri))
+            } else {
+                productImage.setImageDrawable(null)
+                productImage.setBackgroundColor(
+                    itemView.context.getColor(R.color.lightGray)
+                )
+                
             addButton.setOnClickListener { onAddToCart(product) }
             loadImage(product.imageUri)
         }

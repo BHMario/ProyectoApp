@@ -28,8 +28,6 @@ class ProductCatalogActivity : AppCompatActivity() {
     private lateinit var bottomNav: BottomNavigationView
     private lateinit var viewModel: ProductViewModel
 
-    private val cart = mutableListOf<CartProduct>()
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -94,35 +92,33 @@ class ProductCatalogActivity : AppCompatActivity() {
         } else {
             recyclerView.visibility     = android.view.View.VISIBLE
             emptyResultsText.visibility = android.view.View.GONE
-            recyclerView.adapter = ProductAdapter(products) { addToCart(it) }
+            recyclerView.adapter = ProductAdapter(products, { addToCart(it) }, { openProductDetail(it) })
         }
     }
 
+    private fun openProductDetail(product: Product) {
+        val intent = Intent(this, ProductDetailActivity::class.java)
+        intent.putExtra("PRODUCT_EXTRA", product)
+        startActivity(intent)
+    }
+
     private fun addToCart(product: Product) {
-        val existing = cart.find { it.product.id == product.id }
-        if (existing != null) existing.quantity++ else cart.add(CartProduct(product, 1))
+        CartManager.addProduct(product)
         updateCartButton()
     }
 
     private fun openCart() {
         val intent = Intent(this, CartActivity::class.java)
-        intent.putParcelableArrayListExtra("cartItems", ArrayList(cart))
-        startActivityForResult(intent, CART_REQUEST_CODE)
+        startActivity(intent)
     }
 
     private fun updateCartButton() {
-        cartCount.text = cart.sumOf { it.quantity }.toString()
+        cartCount.text = CartManager.getItemCount().toString()
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == CART_REQUEST_CODE && data != null) {
-            @Suppress("UNCHECKED_CAST")
-            val updated = data.getParcelableArrayListExtra<CartProduct>("cartItems") as? ArrayList<CartProduct> ?: ArrayList()
-            cart.clear()
-            cart.addAll(updated)
-            updateCartButton()
-        }
+    override fun onResume() {
+        super.onResume()
+        updateCartButton()
     }
 
     companion object {
