@@ -11,8 +11,8 @@ class DatabaseHelper(context: Context) :
 
     companion object {
         const val DATABASE_NAME = "mangup.db"
-        // v1: schema | v2: stock | v3: image_uri
-        const val DATABASE_VERSION = 3
+        // v1: schema | v2: stock | v3: image_uri | v4: fix taza image
+        const val DATABASE_VERSION = 4
 
         // ---- Tables ----
         private const val TABLE_USERS = "users"
@@ -92,6 +92,12 @@ class DatabaseHelper(context: Context) :
             // Actualizar datos existentes con las rutas de assets si es necesario
             seedProductsImages(db)
         }
+        if (oldVersion < 4) {
+            // Corregir imagen de Taza Ataque a los Titanes
+            db.execSQL(
+                "UPDATE $TABLE_PRODUCTS SET image_uri = 'assets://images/taza_ataque_a_los_titanes.png' WHERE name = 'Taza Ataque a los Titanes'"
+            )
+        }
     }
 
     private fun seedProductsImages(db: SQLiteDatabase) {
@@ -107,6 +113,7 @@ class DatabaseHelper(context: Context) :
             "Gorro Sailor Moon"           to "assets://images/gorro_sailor_moon.png",
             "Manga Dragon Ball Vol 1"     to "assets://images/jujutsu_kaisen_vol1.png", // Usando JJK como temporal si no hay DB1
             "Figura Gojo Satoru"          to "assets://images/jujutsu_kaisen_vol1.png",
+            "Taza Ataque a los Titanes"   to "assets://images/taza_ataque_a_los_titanes.png",
             "Manga Bleach Vol 2"          to "assets://images/jujutsu_kaisen_vol1.png"
         )
         updates.forEach { (name, uri) ->
@@ -143,7 +150,7 @@ class DatabaseHelper(context: Context) :
             listOf("Gorro Sailor Moon",           16.99, "Merchandising", "Gorro de invierno con logo Sailor Moon",  7,  "assets://images/gorro_sailor_moon.png"),
             listOf("Manga Dragon Ball Vol 1",     11.99, "Manga",         "El inicio de la aventura de Goku",        14, "assets://images/jujutsu_kaisen_vol1.png"),
             listOf("Figura Gojo Satoru",          34.99, "Figuras",        "Figura premium de Gojo con efectos",      4,  "assets://images/jujutsu_kaisen_vol1.png"),
-            listOf("Taza Ataque a los Titanes",    9.99, "Merchandising", "Taza cerámica diseño exclusivo",          25, "assets://images/mochila_anime.png"),
+            listOf("Taza Ataque a los Titanes",    9.99, "Merchandising", "Taza cerámica diseño exclusivo",          25, "assets://images/taza_ataque_a_los_titanes.png"),
             listOf("Manga Bleach Vol 2",          12.99, "Manga",         "Segundo volumen de Bleach",               11, "assets://images/jujutsu_kaisen_vol1.png")
         )
         rows.forEach { r ->
@@ -173,6 +180,20 @@ class DatabaseHelper(context: Context) :
             false
         }
     }
+
+    fun updateUserName(userId: Int, name: String): Boolean =
+        writableDatabase.update(
+            TABLE_USERS,
+            ContentValues().apply { put("name", name) },
+            "id = ?", arrayOf(userId.toString())
+        ) > 0
+
+    fun updateUserPhone(userId: Int, phone: String): Boolean =
+        writableDatabase.update(
+            TABLE_USERS,
+            ContentValues().apply { put("phone", phone) },
+            "id = ?", arrayOf(userId.toString())
+        ) > 0
 
     fun loginUser(email: String, password: String): User? {
         val cursor = readableDatabase.query(

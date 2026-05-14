@@ -48,6 +48,9 @@ class CartActivity : AppCompatActivity() {
 
         updateTotal()
 
+        // Ajustar visibilidad de etiquetas en la barra inferior según orientación
+        BottomNavHelper.apply(bottomNav)
+
         checkoutButton.setOnClickListener {
             if (CartManager.getCart().isEmpty()) {
                 Toast.makeText(this, "Tu carrito está vacío", Toast.LENGTH_SHORT).show()
@@ -81,12 +84,22 @@ class CartActivity : AppCompatActivity() {
         bottomNav.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.nav_home -> {
+                    startActivity(
+                        Intent(this, ProductCatalogActivity::class.java).apply {
+                            flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
+                        }
+                    )
                     finish()
                     true
                 }
                 R.id.nav_cart -> true
                 R.id.nav_profile -> {
-                    startActivity(Intent(this, ProfileActivity::class.java))
+                    startActivity(
+                        Intent(this, ProfileActivity::class.java).apply {
+                            flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
+                        }
+                    )
+                    finish()
                     true
                 }
                 else -> false

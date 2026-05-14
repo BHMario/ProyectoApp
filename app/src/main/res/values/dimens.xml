@@ -32,4 +32,22 @@
     <dimen name="elevation_small">2dp</dimen>
     <dimen name="elevation_medium">4dp</dimen>
     <dimen name="elevation_large">8dp</dimen>
+
+    <!-- Header / top bar -->
+    <dimen name="header_margin_top">16dp</dimen>
+    <dimen name="header_search_margin_top">12dp</dimen>
+    <dimen name="header_filter_margin_top">12dp</dimen>
+    <dimen name="header_filter_padding_bottom">12dp</dimen>
+    <dimen name="header_title_size">26sp</dimen>
+    <dimen name="cart_header_height">80dp</dimen>
+    <dimen name="profile_header_padding_v">20dp</dimen>
+
+    <!-- Search & filter chips -->
+    <dimen name="search_bar_height">44dp</dimen>
+    <dimen name="filter_group_height">36dp</dimen>
+    <dimen name="filter_chip_height">32dp</dimen>
+
+    <!-- Bottom navigation -->
+    <dimen name="bottom_nav_icon_size">24dp</dimen>
+    <dimen name="bottom_nav_icon_size_portrait">24dp</dimen>
 </resources>

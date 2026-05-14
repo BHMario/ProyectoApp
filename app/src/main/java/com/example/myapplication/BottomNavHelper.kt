@@ -6,7 +6,8 @@ import com.google.android.material.navigation.NavigationBarView
 
 /**
  * Aplica un tamaño compacto a la barra de navegación inferior en modo landscape.
- * En portrait se deja el comportamiento por defecto (wrap_content + labels visibles).
+ * NO se toca la altura: BottomNavigationView gestiona su propio mínimo interno.
+ * Solo se reducen los iconos y se ocultan las etiquetas.
  */
 object BottomNavHelper {
 
@@ -15,27 +16,16 @@ object BottomNavHelper {
                 Configuration.ORIENTATION_LANDSCAPE
 
         if (isLandscape) {
-            // Ocultar etiquetas para ganar altura
+            // Ocultar etiquetas de texto para ganar espacio vertical
             bottomNav.labelVisibilityMode = NavigationBarView.LABEL_VISIBILITY_UNLABELED
-
-            // Reducir tamaño de iconos
+            // Reducir iconos a 20dp en landscape
             val iconSizePx = bottomNav.resources.getDimensionPixelSize(R.dimen.bottom_nav_icon_size)
             bottomNav.itemIconSize = iconSizePx
-
-            // Forzar altura más pequeña
-            val heightPx = bottomNav.resources.getDimensionPixelSize(R.dimen.bottom_nav_height)
-            val lp = bottomNav.layoutParams
-            lp.height = heightPx
-            bottomNav.layoutParams = lp
         } else {
-            // Portrait: valores por defecto
+            // Portrait: etiquetas visibles e iconos a tamaño normal (24dp)
             bottomNav.labelVisibilityMode = NavigationBarView.LABEL_VISIBILITY_LABELED
             bottomNav.itemIconSize =
                 bottomNav.resources.getDimensionPixelSize(R.dimen.bottom_nav_icon_size_portrait)
-            val lp = bottomNav.layoutParams
-            lp.height = android.view.ViewGroup.LayoutParams.WRAP_CONTENT
-            bottomNav.layoutParams = lp
         }
     }
 }
-

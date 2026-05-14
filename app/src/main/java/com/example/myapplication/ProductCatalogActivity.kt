@@ -27,6 +27,7 @@ class ProductCatalogActivity : AppCompatActivity() {
     private lateinit var emptyResultsText: TextView
     private lateinit var bottomNav: BottomNavigationView
     private lateinit var viewModel: ProductViewModel
+    private lateinit var catalogTitle: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,9 +48,16 @@ class ProductCatalogActivity : AppCompatActivity() {
         filterChipGroup   = findViewById(R.id.filterChipGroup)
         emptyResultsText  = findViewById(R.id.emptyResultsText)
         bottomNav         = findViewById(R.id.bottomNavigation)
+        catalogTitle      = findViewById(R.id.catalogTitle)
+
+        // Ajustar visibilidad de etiquetas en la barra inferior según orientación
+        applyBottomNavLabelMode()
 
         recyclerView.layoutManager = GridLayoutManager(this, 2)
         applyFilters()
+
+        // Clic en el logo "MangUP" → resetea búsqueda, filtros y vuelve arriba
+        catalogTitle.setOnClickListener { goToTop() }
 
         cartButton.setOnClickListener { openCart() }
 
@@ -76,12 +84,27 @@ class ProductCatalogActivity : AppCompatActivity() {
         bottomNav.selectedItemId = R.id.nav_home
         bottomNav.setOnItemSelectedListener { item ->
             when (item.itemId) {
-                R.id.nav_home    -> true
+                R.id.nav_home    -> { goToTop(); true }
                 R.id.nav_cart    -> { openCart(); true }
                 R.id.nav_profile -> { startActivity(Intent(this, ProfileActivity::class.java)); true }
                 else             -> false
             }
         }
+    }
+
+    /** Muestra u oculta las etiquetas de la barra inferior según orientación */
+    private fun applyBottomNavLabelMode() {
+        BottomNavHelper.apply(bottomNav)
+    }
+
+    /** Resetea filtros, búsqueda y hace scroll al principio del catálogo */
+    private fun goToTop() {
+        searchEditText.setText("")
+        filterChipGroup.check(R.id.chipAll)
+        viewModel.setSearch("")
+        viewModel.setFilter("Todos")
+        applyFilters()
+        recyclerView.scrollToPosition(0)
     }
 
     private fun applyFilters() {
