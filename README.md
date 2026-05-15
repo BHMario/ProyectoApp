@@ -2,6 +2,10 @@
 
 Aplicación Android de ecommerce temático de anime y manga, desarrollada en **Kotlin**. Permite registrar usuarios, iniciar sesión, explorar un catálogo de productos, ver fichas de detalle, gestionar el carrito, finalizar compras, consultar pedidos y dejar reseñas.
 
+#Video Demo
+
+https://github.com/user-attachments/assets/2c7bddd6-9e7a-4527-8df5-99f15aba8373
+
 ## Descripción general
 
 MangUP simula una tienda online especializada en productos relacionados con el universo anime/manga:
