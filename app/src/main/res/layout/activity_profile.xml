@@ -14,8 +14,8 @@
         android:orientation="vertical"
         android:background="@drawable/header_gradient"
         android:paddingHorizontal="20dp"
-        android:paddingTop="20dp"
-        android:paddingBottom="20dp"
+        android:paddingTop="@dimen/profile_header_padding_v"
+        android:paddingBottom="@dimen/profile_header_padding_v"
         android:elevation="4dp">
 
         <TextView
@@ -47,7 +47,7 @@
             android:orientation="vertical"
             android:padding="16dp">
 
-            <!-- Avatar + Nombre -->
+            <!-- Avatar -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -57,15 +57,37 @@
                 android:padding="24dp"
                 android:layout_marginBottom="16dp">
 
-                <ImageView
-                    android:layout_width="80dp"
-                    android:layout_height="80dp"
-                    android:src="@drawable/ic_person"
-                    android:background="@color/primaryOrange"
-                    android:padding="16dp"
-                    android:contentDescription="Avatar"
-                    android:scaleType="centerInside"
-                    android:layout_marginBottom="16dp" />
+                <!-- Avatar con overlay de cámara -->
+                <FrameLayout
+                    android:layout_width="96dp"
+                    android:layout_height="96dp"
+                    android:layout_marginBottom="16dp">
+
+                    <ImageView
+                        android:id="@+id/profileAvatar"
+                        android:layout_width="96dp"
+                        android:layout_height="96dp"
+                        android:src="@drawable/ic_person"
+                        android:background="@color/primaryOrange"
+                        android:padding="16dp"
+                        android:contentDescription="Avatar"
+                        android:scaleType="centerCrop"
+                        android:clickable="true"
+                        android:focusable="true" />
+
+                    <!-- Botón cámara (esquina inferior derecha) -->
+                    <ImageView
+                        android:id="@+id/changePhotoButton"
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:layout_gravity="bottom|end"
+                        android:src="@drawable/ic_camera"
+                        android:background="@color/primaryOrange"
+                        android:padding="4dp"
+                        android:contentDescription="Cambiar foto"
+                        android:clickable="true"
+                        android:focusable="true" />
+                </FrameLayout>
 
                 <TextView
                     android:id="@+id/profileName"
@@ -83,16 +105,183 @@
                     android:layout_height="wrap_content"
                     android:text="email@ejemplo.com"
                     android:textSize="14sp"
-                    android:textColor="@color/textSecondary"
-                    android:layout_marginBottom="4dp" />
+                    android:textColor="@color/textSecondary" />
+            </LinearLayout>
+
+            <!-- Datos Personales -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="@drawable/card_background"
+                android:padding="20dp"
+                android:layout_marginBottom="16dp">
 
                 <TextView
-                    android:id="@+id/profilePhone"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="No especificado"
-                    android:textSize="14sp"
-                    android:textColor="@color/textSecondary" />
+                    android:text="Datos Personales"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/textPrimary"
+                    android:layout_marginBottom="16dp" />
+
+                <!-- Fila Nombre -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:layout_marginBottom="12dp">
+
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@drawable/ic_person"
+                        android:layout_marginEnd="12dp"
+                        android:contentDescription="Nombre" />
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Nombre"
+                            android:textSize="11sp"
+                            android:textColor="@color/textSecondary" />
+
+                        <TextView
+                            android:id="@+id/profileNameData"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="—"
+                            android:textSize="15sp"
+                            android:textColor="@color/textPrimary" />
+                    </LinearLayout>
+
+                    <ImageView
+                        android:id="@+id/editNameBtn"
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:src="@drawable/ic_edit"
+                        android:padding="4dp"
+                        android:contentDescription="Editar nombre"
+                        android:clickable="true"
+                        android:focusable="true" />
+                </LinearLayout>
+
+                <!-- Divisor -->
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/lightGray"
+                    android:layout_marginBottom="12dp" />
+
+                <!-- Fila Email -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:layout_marginBottom="12dp">
+
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@drawable/ic_search"
+                        android:layout_marginEnd="12dp"
+                        android:contentDescription="Email" />
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Email"
+                            android:textSize="11sp"
+                            android:textColor="@color/textSecondary" />
+
+                        <TextView
+                            android:id="@+id/profileEmailData"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="—"
+                            android:textSize="15sp"
+                            android:textColor="@color/textPrimary" />
+                    </LinearLayout>
+
+                    <!-- Email no editable: candado visual -->
+                    <ImageView
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:src="@drawable/ic_back"
+                        android:padding="4dp"
+                        android:alpha="0.3"
+                        android:contentDescription="Email no editable" />
+                </LinearLayout>
+
+                <!-- Divisor -->
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/lightGray"
+                    android:layout_marginBottom="12dp" />
+
+                <!-- Fila Teléfono -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@drawable/ic_shopping_cart"
+                        android:layout_marginEnd="12dp"
+                        android:contentDescription="Teléfono" />
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Teléfono"
+                            android:textSize="11sp"
+                            android:textColor="@color/textSecondary" />
+
+                        <TextView
+                            android:id="@+id/profilePhoneData"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="—"
+                            android:textSize="15sp"
+                            android:textColor="@color/textPrimary" />
+                    </LinearLayout>
+
+                    <ImageView
+                        android:id="@+id/editPhoneBtn"
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:src="@drawable/ic_edit"
+                        android:padding="4dp"
+                        android:contentDescription="Editar teléfono"
+                        android:clickable="true"
+                        android:focusable="true" />
+                </LinearLayout>
+
             </LinearLayout>
 
             <!-- Historial de Pedidos -->
@@ -133,7 +322,7 @@
                     android:visibility="gone" />
             </LinearLayout>
 
-            <!-- Admin Panel Button (only visible for admin users) -->
+            <!-- Admin Panel Button -->
             <Button
                 android:id="@+id/adminButton"
                 android:layout_width="match_parent"
@@ -144,7 +333,7 @@
                 android:layout_marginBottom="8dp"
                 android:visibility="gone" />
 
-            <!-- Botón cerrar sesión -->
+            <!-- Cerrar sesión -->
             <Button
                 android:id="@+id/logoutButton"
                 style="@style/ButtonPrimary"

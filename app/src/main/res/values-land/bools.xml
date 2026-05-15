@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- En landscape ocultamos las etiquetas de la barra inferior para ganar espacio -->
+    <bool name="bottom_nav_show_labels">false</bool>
+</resources>
+

@@ -27,8 +27,7 @@ class ProductCatalogActivity : AppCompatActivity() {
     private lateinit var emptyResultsText: TextView
     private lateinit var bottomNav: BottomNavigationView
     private lateinit var viewModel: ProductViewModel
-
-    private val cart = mutableListOf<CartProduct>()
+    private lateinit var catalogTitle: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,10 +48,17 @@ class ProductCatalogActivity : AppCompatActivity() {
         filterChipGroup   = findViewById(R.id.filterChipGroup)
         emptyResultsText  = findViewById(R.id.emptyResultsText)
         bottomNav         = findViewById(R.id.bottomNavigation)
+        catalogTitle      = findViewById(R.id.catalogTitle)
+
+        // Ajustar visibilidad de etiquetas en la barra inferior según orientación
+        applyBottomNavLabelMode()
 
         val spanCount = if (resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) 3 else 2
         recyclerView.layoutManager = GridLayoutManager(this, spanCount)
         applyFilters()
+
+        // Clic en el logo "MangUP" → resetea búsqueda, filtros y vuelve arriba
+        catalogTitle.setOnClickListener { goToTop() }
 
         cartButton.setOnClickListener { openCart() }
 
@@ -79,12 +85,27 @@ class ProductCatalogActivity : AppCompatActivity() {
         bottomNav.selectedItemId = R.id.nav_home
         bottomNav.setOnItemSelectedListener { item ->
             when (item.itemId) {
-                R.id.nav_home    -> true
+                R.id.nav_home    -> { goToTop(); true }
                 R.id.nav_cart    -> { openCart(); true }
                 R.id.nav_profile -> { startActivity(Intent(this, ProfileActivity::class.java)); true }
                 else             -> false
             }
         }
+    }
+
+    /** Muestra u oculta las etiquetas de la barra inferior según orientación */
+    private fun applyBottomNavLabelMode() {
+        BottomNavHelper.apply(bottomNav)
+    }
+
+    /** Resetea filtros, búsqueda y hace scroll al principio del catálogo */
+    private fun goToTop() {
+        searchEditText.setText("")
+        filterChipGroup.check(R.id.chipAll)
+        viewModel.setSearch("")
+        viewModel.setFilter("Todos")
+        applyFilters()
+        recyclerView.scrollToPosition(0)
     }
 
     private fun applyFilters() {
@@ -95,35 +116,33 @@ class ProductCatalogActivity : AppCompatActivity() {
         } else {
             recyclerView.visibility     = android.view.View.VISIBLE
             emptyResultsText.visibility = android.view.View.GONE
-            recyclerView.adapter = ProductAdapter(products) { addToCart(it) }
+            recyclerView.adapter = ProductAdapter(products, { addToCart(it) }, { openProductDetail(it) })
         }
     }
 
+    private fun openProductDetail(product: Product) {
+        val intent = Intent(this, ProductDetailActivity::class.java)
+        intent.putExtra("PRODUCT_EXTRA", product)
+        startActivity(intent)
+    }
+
     private fun addToCart(product: Product) {
-        val existing = cart.find { it.product.id == product.id }
-        if (existing != null) existing.quantity++ else cart.add(CartProduct(product, 1))
+        CartManager.addProduct(product)
         updateCartButton()
     }
 
     private fun openCart() {
         val intent = Intent(this, CartActivity::class.java)
-        intent.putParcelableArrayListExtra("cartItems", ArrayList(cart))
-        startActivityForResult(intent, CART_REQUEST_CODE)
+        startActivity(intent)
     }
 
     private fun updateCartButton() {
-        cartCount.text = cart.sumOf { it.quantity }.toString()
+        cartCount.text = CartManager.getItemCount().toString()
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == CART_REQUEST_CODE && data != null) {
-            @Suppress("UNCHECKED_CAST")
-            val updated = data.getParcelableArrayListExtra<CartProduct>("cartItems") as? ArrayList<CartProduct> ?: ArrayList()
-            cart.clear()
-            cart.addAll(updated)
-            updateCartButton()
-        }
+    override fun onResume() {
+        super.onResume()
+        updateCartButton()
     }
 
     companion object {
