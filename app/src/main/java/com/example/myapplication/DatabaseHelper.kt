@@ -11,14 +11,15 @@ class DatabaseHelper(context: Context) :
 
     companion object {
         const val DATABASE_NAME = "mangup.db"
-        // v1: schema | v2: stock | v3: image_uri | v4: fix taza image
-        const val DATABASE_VERSION = 4
+        // v1: schema | v2: stock | v3: image_uri | v4: fix taza image | v5: reviews
+        const val DATABASE_VERSION = 5
 
         // ---- Tables ----
         private const val TABLE_USERS = "users"
         private const val TABLE_PRODUCTS = "products"
         private const val TABLE_ORDERS = "orders"
         private const val TABLE_ORDER_ITEMS = "order_items"
+        private const val TABLE_REVIEWS = "reviews"
     }
 
     // ─────────────────────────────── Lifecycle ────────────────────────────── //
@@ -79,6 +80,21 @@ class DatabaseHelper(context: Context) :
             )
         """.trimIndent())
 
+        // Reviews table
+        db.execSQL("""
+            CREATE TABLE $TABLE_REVIEWS (
+                id          INTEGER PRIMARY KEY AUTOINCREMENT,
+                product_id  INTEGER NOT NULL,
+                user_id     INTEGER NOT NULL,
+                user_name   TEXT    NOT NULL,
+                rating      INTEGER NOT NULL,
+                comment     TEXT    NOT NULL,
+                date        TEXT    NOT NULL,
+                FOREIGN KEY (product_id) REFERENCES $TABLE_PRODUCTS(id),
+                FOREIGN KEY (user_id)    REFERENCES $TABLE_USERS(id)
+            )
+        """.trimIndent())
+
         seedProducts(db)
         seedAdminUser(db)
     }
@@ -97,6 +113,21 @@ class DatabaseHelper(context: Context) :
             db.execSQL(
                 "UPDATE $TABLE_PRODUCTS SET image_uri = 'assets://images/taza_ataque_a_los_titanes.png' WHERE name = 'Taza Ataque a los Titanes'"
             )
+        }
+        if (oldVersion < 5) {
+            db.execSQL("""
+                CREATE TABLE $TABLE_REVIEWS (
+                    id          INTEGER PRIMARY KEY AUTOINCREMENT,
+                    product_id  INTEGER NOT NULL,
+                    user_id     INTEGER NOT NULL,
+                    user_name   TEXT    NOT NULL,
+                    rating      INTEGER NOT NULL,
+                    comment     TEXT    NOT NULL,
+                    date        TEXT    NOT NULL,
+                    FOREIGN KEY (product_id) REFERENCES $TABLE_PRODUCTS(id),
+                    FOREIGN KEY (user_id)    REFERENCES $TABLE_USERS(id)
+                )
+            """.trimIndent())
         }
     }
 
@@ -341,5 +372,91 @@ class DatabaseHelper(context: Context) :
             }
         }
         return if (items.isEmpty()) "Sin artículos" else items.joinToString(", ")
+    }
+
+    // ─────────────────────────────── REVIEWS ──────────────────────────────── //
+
+    fun insertReview(review: Review): Long {
+        return writableDatabase.insert(TABLE_REVIEWS, null, ContentValues().apply {
+            put("product_id", review.productId)
+            put("user_id",    review.userId)
+            put("user_name",  review.userName)
+            put("rating",     review.rating)
+            put("comment",    review.comment)
+            put("date",       review.date)
+        })
+    }
+
+    fun getReviewsByProduct(productId: Int): List<Review> {
+        val list = mutableListOf<Review>()
+        readableDatabase.query(
+            TABLE_REVIEWS, null,
+            "product_id = ?", arrayOf(productId.toString()),
+            null, null, "date DESC"
+        ).use { c ->
+            while (c.moveToNext()) {
+                list.add(
+                    Review(
+                        id        = c.getInt(c.getColumnIndexOrThrow("id")),
+                        productId = c.getInt(c.getColumnIndexOrThrow("product_id")),
+                        userId    = c.getInt(c.getColumnIndexOrThrow("user_id")),
+                        userName  = c.getString(c.getColumnIndexOrThrow("user_name")),
+                        rating    = c.getInt(c.getColumnIndexOrThrow("rating")),
+                        comment   = c.getString(c.getColumnIndexOrThrow("comment")),
+                        date      = c.getString(c.getColumnIndexOrThrow("date"))
+                    )
+                )
+            }
+        }
+        return list
+    }
+
+    fun getUserReviewForProduct(userId: Int, productId: Int): Review? {
+        readableDatabase.query(
+            TABLE_REVIEWS, null,
+            "user_id = ? AND product_id = ?", arrayOf(userId.toString(), productId.toString()),
+            null, null, null
+        ).use { c ->
+            if (c.moveToFirst()) {
+                return Review(
+                    id        = c.getInt(c.getColumnIndexOrThrow("id")),
+                    productId = c.getInt(c.getColumnIndexOrThrow("product_id")),
+                    userId    = c.getInt(c.getColumnIndexOrThrow("user_id")),
+                    userName  = c.getString(c.getColumnIndexOrThrow("user_name")),
+                    rating    = c.getInt(c.getColumnIndexOrThrow("rating")),
+                    comment   = c.getString(c.getColumnIndexOrThrow("comment")),
+                    date      = c.getString(c.getColumnIndexOrThrow("date"))
+                )
+            }
+        }
+        return null
+    }
+
+    fun updateReview(review: Review): Boolean {
+        return writableDatabase.update(
+            TABLE_REVIEWS,
+            ContentValues().apply {
+                put("rating",  review.rating)
+                put("comment", review.comment)
+                put("date",    review.date)
+            },
+            "id = ?", arrayOf(review.id.toString())
+        ) > 0
+    }
+
+    fun hasUserPurchasedProduct(userId: Int, productId: Int): Boolean {
+        val query = """
+            SELECT COUNT(*) 
+            FROM $TABLE_ORDERS o
+            JOIN $TABLE_ORDER_ITEMS oi ON o.id = oi.order_id
+            WHERE o.user_id = ? AND oi.product_id = ?
+        """.trimIndent()
+        
+        readableDatabase.rawQuery(query, arrayOf(userId.toString(), productId.toString())).use { c ->
+            if (c.moveToFirst()) {
+                return c.getInt(0) > 0
+            }
+        }
+        return false
     }
 }
