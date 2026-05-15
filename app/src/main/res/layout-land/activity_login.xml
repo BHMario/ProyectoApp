@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Landscape: Logo a la izquierda, formulario a la derecha -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal"
+    android:background="@color/backgroundColor">
+
+    <!-- Panel izquierdo: Branding -->
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:background="@drawable/header_gradient"
+        android:padding="24dp">
+
+        <ImageView
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:src="@drawable/ic_launcher_foreground"
+            android:contentDescription="Logo de MangUP"
+            android:scaleType="centerInside"
+            android:layout_marginBottom="16dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="MangUP"
+            android:textSize="32sp"
+            android:textStyle="bold"
+            android:textColor="@color/white" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tu ecommerce de anime"
+            android:textSize="13sp"
+            android:textColor="#FFE0B2"
+            android:layout_marginTop="6dp" />
+
+    </LinearLayout>
+
+    <!-- Panel derecho: Formulario -->
+    <ScrollView
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingHorizontal="24dp"
+            android:paddingTop="28dp"
+            android:paddingBottom="20dp"
+            android:gravity="center_horizontal">
+
+            <!-- Card formulario -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="@drawable/card_background"
+                android:padding="20dp"
+                android:layout_marginBottom="16dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Correo electrónico o Usuario"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/textPrimary"
+                    android:layout_marginBottom="8dp" />
+
+                <EditText
+                    android:id="@+id/loginEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:hint="nombre@ejemplo.com"
+                    android:paddingHorizontal="14dp"
+                    android:inputType="textEmailAddress"
+                    android:background="@drawable/edit_text_background"
+                    android:textSize="16sp"
+                    android:textColor="@color/textPrimary"
+                    android:textColorHint="@color/textHint"
+                    android:layout_marginBottom="16dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Contraseña"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/textPrimary"
+                    android:layout_marginBottom="8dp" />
+
+                <EditText
+                    android:id="@+id/passwordEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:hint="••••••••"
+                    android:paddingHorizontal="14dp"
+                    android:inputType="textPassword"
+                    android:background="@drawable/edit_text_background"
+                    android:textSize="16sp"
+                    android:textColor="@color/textPrimary"
+                    android:textColorHint="@color/textHint"
+                    android:layout_marginBottom="20dp" />
+
+                <Button
+                    android:id="@+id/loginButton"
+                    style="@style/ButtonPrimary"
+                    android:layout_height="50dp"
+                    android:text="Iniciar Sesión" />
+
+            </LinearLayout>
+
+            <!-- Link registro -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="¿No tienes cuenta? "
+                    android:textSize="14sp"
+                    android:textColor="@color/textSecondary" />
+
+                <TextView
+                    android:id="@+id/registerLink"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Regístrate"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/primaryOrange"
+                    android:clickable="true"
+                    android:focusable="true" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

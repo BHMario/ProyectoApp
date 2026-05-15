@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Landscape: Header compacto horizontal, productos con más columnas -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/backgroundColor">
+
+    <!-- Header compacto landscape -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingHorizontal="16dp"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        android:background="@drawable/header_gradient"
+        android:elevation="4dp">
+
+        <!-- Fila superior: título + búsqueda + carrito -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="8dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="MangUP"
+                android:textSize="22sp"
+                android:textStyle="bold"
+                android:textColor="@color/white"
+                android:layout_marginEnd="12dp" />
+
+            <!-- Barra de búsqueda -->
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="36dp"
+                android:layout_weight="1"
+                android:orientation="horizontal"
+                android:background="@drawable/edit_text_background"
+                android:gravity="center_vertical"
+                android:paddingHorizontal="10dp"
+                android:layout_marginEnd="12dp">
+
+                <ImageView
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:src="@drawable/ic_search"
+                    android:contentDescription="Buscar"
+                    android:layout_marginEnd="6dp" />
+
+                <EditText
+                    android:id="@+id/searchEditText"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:hint="Buscar productos..."
+                    android:textSize="13sp"
+                    android:textColor="@color/textPrimary"
+                    android:textColorHint="@color/textHint"
+                    android:background="@android:color/transparent"
+                    android:inputType="text"
+                    android:imeOptions="actionSearch"
+                    android:singleLine="true" />
+
+            </LinearLayout>
+
+            <!-- Botón carrito -->
+            <FrameLayout
+                android:id="@+id/adminButton"
+                android:layout_width="44dp"
+                android:layout_height="44dp">
+
+                <ImageButton
+                    android:id="@+id/cartButton"
+                    android:layout_width="44dp"
+                    android:layout_height="44dp"
+                    android:src="@drawable/ic_shopping_cart"
+                    android:background="@drawable/button_primary_background"
+                    android:scaleType="centerInside"
+                    android:contentDescription="Carrito de compras" />
+
+                <TextView
+                    android:id="@+id/cartCount"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_gravity="top|end"
+                    android:text="0"
+                    android:textSize="10sp"
+                    android:textColor="@color/white"
+                    android:textStyle="bold"
+                    android:gravity="center"
+                    android:background="@color/primaryOrange"
+                    android:elevation="4dp" />
+
+            </FrameLayout>
+
+        </LinearLayout>
+
+        <!-- Filtros en fila horizontal -->
+        <HorizontalScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scrollbars="none">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <RadioGroup
+                    android:id="@+id/filterChipGroup"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <RadioButton
+                        android:id="@+id/chipAll"
+                        android:layout_width="wrap_content"
+                        android:layout_height="28dp"
+                        android:text="Todos"
+                        android:textSize="11sp"
+                        android:paddingHorizontal="12dp"
+                        android:button="@null"
+                        android:gravity="center"
+                        android:background="@drawable/filter_chip_background"
+                        android:textColor="@color/chip_text_selector"
+                        android:checked="true"
+                        android:layout_marginEnd="6dp" />
+
+                    <RadioButton
+                        android:id="@+id/chipManga"
+                        android:layout_width="wrap_content"
+                        android:layout_height="28dp"
+                        android:text="Manga"
+                        android:textSize="11sp"
+                        android:paddingHorizontal="12dp"
+                        android:button="@null"
+                        android:gravity="center"
+                        android:background="@drawable/filter_chip_background"
+                        android:textColor="@color/chip_text_selector"
+                        android:layout_marginEnd="6dp" />
+
+                    <RadioButton
+                        android:id="@+id/chipFiguras"
+                        android:layout_width="wrap_content"
+                        android:layout_height="28dp"
+                        android:text="Figuras"
+                        android:textSize="11sp"
+                        android:paddingHorizontal="12dp"
+                        android:button="@null"
+                        android:gravity="center"
+                        android:background="@drawable/filter_chip_background"
+                        android:textColor="@color/chip_text_selector"
+                        android:layout_marginEnd="6dp" />
+
+                    <RadioButton
+                        android:id="@+id/chipMerchandising"
+                        android:layout_width="wrap_content"
+                        android:layout_height="28dp"
+                        android:text="Merchandising"
+                        android:textSize="11sp"
+                        android:paddingHorizontal="12dp"
+                        android:button="@null"
+                        android:gravity="center"
+                        android:background="@drawable/filter_chip_background"
+                        android:textColor="@color/chip_text_selector" />
+
+                </RadioGroup>
+
+            </LinearLayout>
+        </HorizontalScrollView>
+
+    </LinearLayout>
+
+    <!-- Grid de productos -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/productsRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:padding="8dp"
+        android:clipToPadding="false" />
+
+    <!-- Estado vacío -->
+    <TextView
+        android:id="@+id/emptyResultsText"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:text="No se encontraron productos"
+        android:textSize="16sp"
+        android:textColor="@color/textSecondary"
+        android:gravity="center"
+        android:visibility="gone" />
+
+    <!-- Bottom Navigation -->
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomNavigation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/surfaceColor"
+        app:menu="@menu/bottom_nav_menu"
+        app:itemIconTint="@color/bottom_nav_selector"
+        app:itemTextColor="@color/bottom_nav_selector"
+        app:labelVisibilityMode="labeled" />
+
+</LinearLayout>

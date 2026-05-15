@@ -1,6 +1,7 @@
 package com.example.myapplication
 
 import android.content.Intent
+import android.content.res.Configuration
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -20,7 +21,6 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 class ProductCatalogActivity : AppCompatActivity() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var cartButton: ImageButton
-    private lateinit var adminButton: ImageButton
     private lateinit var cartCount: TextView
     private lateinit var searchEditText: EditText
     private lateinit var filterChipGroup: RadioGroup
@@ -50,7 +50,8 @@ class ProductCatalogActivity : AppCompatActivity() {
         emptyResultsText  = findViewById(R.id.emptyResultsText)
         bottomNav         = findViewById(R.id.bottomNavigation)
 
-        recyclerView.layoutManager = GridLayoutManager(this, 2)
+        val spanCount = if (resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) 3 else 2
+        recyclerView.layoutManager = GridLayoutManager(this, spanCount)
         applyFilters()
 
         cartButton.setOnClickListener { openCart() }
